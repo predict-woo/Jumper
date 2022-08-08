@@ -14,8 +14,9 @@ public class Engine {
     public static final int WIDTH = 80;
     public static final int HEIGHT = 60;
     TERenderer ter = new TERenderer();
+    TETile[][] world = new TETile[WIDTH][HEIGHT];
     Random gen = new Random();
-    Map map = new Map(WIDTH,HEIGHT,gen);
+    Renderer ren = new Renderer(world,WIDTH,HEIGHT,gen);
 
     /**
      * Method used for exploring a fresh world. This method should handle all inputs,
@@ -34,9 +35,8 @@ public class Engine {
         //
         // See proj3.byow.InputDemo for a demo of how you can make a nice clean interface
         // that works for many different input types.
-        TERenderer ter = new TERenderer();
         ter.initialize(WIDTH, HEIGHT);
-        TETile[][] world = new TETile[WIDTH][HEIGHT];
+
         for (int x = 0; x < WIDTH; x += 1) {
             for (int y = 0; y < HEIGHT; y += 1) {
                 world[x][y] = Tileset.NOTHING;
@@ -62,7 +62,7 @@ public class Engine {
 
         gen.setSeed(Long.parseLong(seed));
 
-        map.genDungeon();
+        ren.initialize();
 
         ter.renderFrame(world);
 

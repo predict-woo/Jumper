@@ -15,7 +15,7 @@ creates logic
 ```
 x
 y
-state: 0(off) 1(on)
+state: true / false
 ```
 
 ### Map

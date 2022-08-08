@@ -9,12 +9,20 @@ public class Map {
 
     int[][] world;
 
+    ArrayList<Room> roomList = new ArrayList<>();
+    ArrayList<BST> bstList = new ArrayList<>();
+    ArrayList<Corr> corrList = new ArrayList<>();
 
     public Map(int WIDTH,int HEIGHT,Random gen){
         this.WIDTH = WIDTH;
         this.HEIGHT = HEIGHT;
         this.gen = gen;
         this.world = new int[WIDTH][HEIGHT];
+        for (int i = 0; i < WIDTH; i++) {
+            for (int j = 0; j < HEIGHT; j++) {
+                this.world[i][j] = -1;
+            }
+        }
     }
 
 
@@ -51,9 +59,6 @@ public class Map {
     }
 
     public void genDungeon() {
-        ArrayList<Room> roomList = new ArrayList<>();
-        ArrayList<BST> bstList = new ArrayList<>();
-        ArrayList<Corr> corrList = new ArrayList<>();
         BST root = new BST(0, WIDTH - 1, 0, HEIGHT - 1, 0);
         helper1(root, roomList, bstList);
         for (Room r : roomList) {
@@ -64,7 +69,7 @@ public class Map {
             c.drawCorr(world);
         }
     }
-    private class Room {
+    public class Room {
         int x1;
         int x2;
         int y1;
@@ -79,12 +84,13 @@ public class Map {
 
         public static void drawRoom(Room room, int[][] intTiles) {
             for (int i = room.x1; i <= room.x2; i++) {
-                intTiles[i][room.y1] = 1;
-                intTiles[i][room.y2] = 1;
-            }
-            for (int i = room.y1; i <= room.y2; i++) {
-                intTiles[room.x1][i] = 1;
-                intTiles[room.x2][i] = 1;
+                for (int j = room.y1; j <=room.y2 ; j++) {
+                    if(i == room.x1 || i == room.x2 || j == room.y1 || j == room.y2){
+                        intTiles[i][j] = 1;
+                    } else {
+                        intTiles[i][j] = 0;
+                    }
+                }
             }
         }
     }
