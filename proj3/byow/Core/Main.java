@@ -7,7 +7,6 @@ package byow.Core;
  */
 public class Main {
     public static void main(String[] args) {
-        System.out.println(args[0]);
         if (args.length > 2) {
             System.out.println("Can only have two arguments - the flag and input string");
             System.exit(0);

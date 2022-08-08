@@ -22,11 +22,13 @@ import byow.Core.RandomUtils;
  */
 
 public class TETile {
-    private final char character; // Do not rename character or the autograder will break.
-    private final Color textColor;
-    private final Color backgroundColor;
-    private final String description;
-    private final String filepath;
+    private char character; // Do not rename character or the autograder will break.
+    private Color textColor;
+    private Color backgroundColor;
+    private String description;
+    private String filepath;
+
+    private int lightValue = 100;
 
     /**
      * Full constructor for TETile objects.
@@ -59,6 +61,27 @@ public class TETile {
         this.backgroundColor = backgroundColor;
         this.description = description;
         this.filepath = null;
+    }
+
+    public TETile(char character, Color textColor, Color backgroundColor, String description,
+                  int lightValue) {
+        this.character = character;
+        this.textColor = textColor;
+        this.lightValue = lightValue;
+        float[] hsbVars = Color.RGBtoHSB(backgroundColor.getRed(), backgroundColor.getGreen(),
+                backgroundColor.getBlue(), null );
+        this.backgroundColor = Color.getHSBColor(hsbVars[0], hsbVars[1],
+                lightValue/100 * hsbVars[2]);
+        this.description = description;
+        this.filepath = null;
+    }
+
+    public void setLightValue(int lightValue){
+        this.lightValue = lightValue;
+        float[] hsbVars = Color.RGBtoHSB(backgroundColor.getRed(), backgroundColor.getGreen(),
+                backgroundColor.getBlue(), null );
+        this.backgroundColor = Color.getHSBColor(hsbVars[0], hsbVars[1],
+                ((float) lightValue/ (float) 100) * hsbVars[2]);
     }
 
     /**

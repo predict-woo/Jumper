@@ -4,8 +4,9 @@ import byow.TileEngine.TERenderer;
 import byow.TileEngine.TETile;
 import byow.TileEngine.Tileset;
 
+import edu.princeton.cs.algs4.StdDraw;
+
 import java.awt.*;
-import java.util.Queue;
 import java.util.*;
 
 
@@ -18,11 +19,74 @@ public class Engine {
     Random gen = new Random();
     Renderer ren = new Renderer(world,WIDTH,HEIGHT,gen);
 
+    boolean playing = true;
+
     /**
      * Method used for exploring a fresh world. This method should handle all inputs,
      * including inputs from the main menu.
      */
+
     public void interactWithKeyboard() {
+        boolean isBackground = false;
+        ter.initialize(WIDTH, HEIGHT);
+        while(playing){
+            String seed = "";
+            if(StdDraw.hasNextKeyTyped()){
+                char a = StdDraw.nextKeyTyped();
+                if (a == 'n' || a == 'N'){
+                    ter.seedPage("");
+                    while(playing){
+                        if (StdDraw.hasNextKeyTyped()){
+                            char b = StdDraw.nextKeyTyped();
+                            if(b == 's' || b == 'S'){
+                                break;
+                            } else {
+                                seed += b;
+                                ter.seedPage(seed);
+                            }
+                        }
+                    }
+                    System.out.println(seed);
+                    gen.setSeed(Long.parseLong(seed));
+                    ren.initialize();
+                    ter.renderFrame(world);
+
+                    while(playing){
+                        if (StdDraw.hasNextKeyTyped()){
+                            char c = StdDraw.nextKeyTyped();
+                            System.out.println(c);
+                            if (c == 'w'){
+                                ren.player.mover(0,1);
+                            }
+                            if (c == 'a'){
+                                ren.player.mover(-1,0);
+                            }
+                            if (c == 's'){
+                                ren.player.mover(0,-1);
+                            }
+                            if (c == 'd'){
+                                ren.player.mover(1,0);
+                            }
+                            if (c == 'e'){
+                                ren.pickUpLight();
+                            }
+                            if (c == 'f'){
+                                ren.toggleLight();
+                            }
+                            if (c == 'b'){
+                                isBackground = !isBackground;
+                            }
+                            if(isBackground){
+                                ren.render();
+                            } else {
+                                ren.renderV();
+                            }
+                            ter.renderFrame(world);
+                        }
+                    }
+                }
+            }
+        }
     }
 
 
@@ -35,7 +99,6 @@ public class Engine {
         //
         // See proj3.byow.InputDemo for a demo of how you can make a nice clean interface
         // that works for many different input types.
-        ter.initialize(WIDTH, HEIGHT);
 
         for (int x = 0; x < WIDTH; x += 1) {
             for (int y = 0; y < HEIGHT; y += 1) {
@@ -63,8 +126,6 @@ public class Engine {
         gen.setSeed(Long.parseLong(seed));
 
         ren.initialize();
-
-        ter.renderFrame(world);
 
         return world;
     }

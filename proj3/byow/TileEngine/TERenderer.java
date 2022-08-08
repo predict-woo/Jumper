@@ -41,6 +41,8 @@ public class TERenderer {
         StdDraw.clear(new Color(0, 0, 0));
 
         StdDraw.enableDoubleBuffering();
+        StdDraw.setPenColor(Color.WHITE);
+        startPage();
         StdDraw.show();
     }
 
@@ -84,6 +86,8 @@ public class TERenderer {
      * @param world the 2D TETile[][] array to render
      */
     public void renderFrame(TETile[][] world) {
+        Font font = new Font("Monaco", Font.BOLD, TILE_SIZE - 2);
+        StdDraw.setFont(font);
         int numXTiles = world.length;
         int numYTiles = world[0].length;
         StdDraw.clear(new Color(0, 0, 0));
@@ -97,5 +101,23 @@ public class TERenderer {
             }
         }
         StdDraw.show();
+    }
+
+    public void seedPage(String seed){
+        StdDraw.clear(Color.BLACK);
+        Font font = new Font("Monaco", Font.BOLD, 30);
+        StdDraw.setFont(font);
+        StdDraw.text(width/2,height/2, "Enter seed: " + seed);
+        StdDraw.show();
+    }
+
+    public void startPage(){
+        StdDraw.setPenColor(Color.white);
+        StdDraw.setFont(new Font("Arial", Font.PLAIN, 36));
+        StdDraw.text(width / 2, height / 2 + 5, "CS 61B: Dark Halls");
+        StdDraw.setFont(new Font("Arial", Font.PLAIN, 32));
+        StdDraw.text(width / 2, height / 2, "New Game (N)");
+        StdDraw.text(width / 2, height / 2 - 3, "Load Game (L)");
+        StdDraw.text(width / 2, height / 2 - 6, "Quit (Q)");
     }
 }
