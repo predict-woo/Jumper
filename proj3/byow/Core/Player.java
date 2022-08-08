@@ -25,6 +25,7 @@ public class Player {
         if (!world[x+dx][y+dy].equals(Tileset.WALL)){
             this.x += dx;
             this.y += dy;
+            this.moves ++;
         } else {
             System.out.println("Ouch! hit a wall");
         }

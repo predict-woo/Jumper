@@ -13,11 +13,12 @@ import java.util.*;
 public class Engine {
     /* Feel free to change the width and height. */
     public static final int WIDTH = 80;
-    public static final int HEIGHT = 60;
+    public static final int HEIGHT = 40;
     TERenderer ter = new TERenderer();
     TETile[][] world = new TETile[WIDTH][HEIGHT];
     Random gen = new Random();
-    Renderer ren = new Renderer(world,WIDTH,HEIGHT,gen);
+
+    Renderer ren;
 
     boolean playing = true;
 
@@ -28,7 +29,7 @@ public class Engine {
 
     public void interactWithKeyboard() {
         boolean isBackground = false;
-        ter.initialize(WIDTH, HEIGHT);
+        ter.initialize(WIDTH, HEIGHT + 4, 0,1);
         while(playing){
             String seed = "";
             if(StdDraw.hasNextKeyTyped()){
@@ -48,6 +49,7 @@ public class Engine {
                     }
                     System.out.println(seed);
                     gen.setSeed(Long.parseLong(seed));
+                    ren = new Renderer(world,WIDTH,HEIGHT,gen);
                     ren.initialize();
                     ter.renderFrame(world);
 
@@ -69,6 +71,7 @@ public class Engine {
                             }
                             if (c == 'e'){
                                 ren.pickUpLight();
+                                ren.enterPortal();
                             }
                             if (c == 'f'){
                                 ren.toggleLight();
@@ -81,6 +84,7 @@ public class Engine {
                             } else {
                                 ren.renderV();
                             }
+
                             ter.renderFrame(world);
                         }
                     }

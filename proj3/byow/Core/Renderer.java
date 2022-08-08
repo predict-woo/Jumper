@@ -6,6 +6,7 @@ import byow.TileEngine.Tileset;
 
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Random;
 
 public class Renderer {
@@ -18,6 +19,7 @@ public class Renderer {
     Random gen;
 
     ArrayList<Light> lightArrayList = new ArrayList<>();
+    ArrayList<Portal> portalArrayList = new ArrayList<>();
 
     TETile lightSourceOn = new TETile('○',Color.WHITE, new Color(255, 238, 138), "1");
     TETile lightSourceOff = new TETile('◌',Color.WHITE, new Color(43, 39, 15), "1");
@@ -31,12 +33,12 @@ public class Renderer {
 
 
     public Renderer(TETile[][] world,int WIDTH, int HEIGHT,Random gen){
+        this.gen = gen;
         this.map = new Map(WIDTH,HEIGHT,gen);
         this.map.genDungeon();
         this.world = world;
         this.WIDTH = WIDTH;
         this.HEIGHT = HEIGHT;
-        this.gen = gen;
         for (int i = 0; i < 10; i++) {
             unseenLightArray[i] = new TETile(' ',Color.WHITE,
                     new Color((endColor1[0] * i + startColor[0] * (9-i))/9,
@@ -60,6 +62,23 @@ public class Renderer {
         }
     }
 
+    public void enterPortal(){
+        for (int i = 0; i < portalArrayList.size(); i++) {
+            Portal p = portalArrayList.get(i);
+            if(p.x == player.x && p.y == player.y && p.link != null){
+                if(player.lightRadius > 5){
+                    player.lightRadius -= 5;
+                    player.x = p.link.x;
+                    player.y = p.link.y;
+
+                    break;
+                } else {
+                    return;
+                }
+            }
+        }
+    }
+
     public void toggleLight(){
         for(Light l : lightArrayList){
             if(l.x == player.x && l.y == player.y){
@@ -75,8 +94,19 @@ public class Renderer {
                 Light l = new Light(gen.nextInt(r.x2 - r.x1 - 1) + r.x1 + 1,
                         gen.nextInt(r.y2 - r.y1 - 1) + r.y1 + 1, true,r);
                 lightArrayList.add(l);
+            } else {
+                Portal p = new Portal(gen.nextInt(r.x2 - r.x1 - 1) + r.x1 + 1,
+                        gen.nextInt(r.y2 - r.y1 - 1) + r.y1 + 1);
+                portalArrayList.add(p);
             }
 
+        }
+
+        Collections.shuffle(portalArrayList,gen);
+
+        for (int i = 0; i < portalArrayList.size()/2; i++) {
+            portalArrayList.get(i*2).setLink(portalArrayList.get(i*2+1));
+            portalArrayList.get(i*2 + 1).setLink(portalArrayList.get(i*2));
         }
 
         Map.Room r = this.map.roomList.get(gen.nextInt(this.map.roomList.size()));
@@ -150,6 +180,12 @@ public class Renderer {
             }
         }
 
+        for (Portal p : portalArrayList){
+            if(p.link != null){
+                this.world[p.x][p.y] = Tileset.PORTAL;
+            }
+        }
+
         this.world[this.player.x][this.player.y] = Tileset.AVATAR;
     }
 
@@ -191,6 +227,11 @@ public class Renderer {
                 }
             } else {
                 this.world[l.x][l.y] = lightSourceOff;
+            }
+        }
+        for (Portal p : portalArrayList){
+            if(p.link != null && Math.abs(p.x-player.x) + Math.abs(p.y-player.y) < player.lightRadius){
+                this.world[p.x][p.y] = Tileset.PORTAL;
             }
         }
 
