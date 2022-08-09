@@ -120,7 +120,7 @@ public class Engine implements Serializable {
     public void quit() {
         FileOutputStream fout = null;
         try {
-            fout = new FileOutputStream("byow/saves");
+            fout = new FileOutputStream("byow/saves.txt");
         } catch (FileNotFoundException e) {
             throw new RuntimeException(e);
         }
@@ -140,7 +140,7 @@ public class Engine implements Serializable {
 
     public void load() {
         Renderer loadedRen = null;
-        try (FileInputStream in = new FileInputStream("byow/saves");
+        try (FileInputStream in = new FileInputStream("byow/saves.txt");
              ObjectInputStream s = new ObjectInputStream(in)) {
             loadedRen = (Renderer) s.readObject();
         } catch (ClassNotFoundException e) {
