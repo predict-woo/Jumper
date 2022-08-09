@@ -15,12 +15,11 @@ public class Engine implements Serializable {
     TERenderer ter = new TERenderer();
     TETile[][] world = new TETile[WIDTH][HEIGHT];
     Random gen = new Random();
-
     Renderer ren;
-
     boolean playing = true;
-
     int totalMoves = 150;
+    boolean isBackground = false;
+    boolean isAboutToQuit = false;
 
 
     /**
@@ -28,9 +27,59 @@ public class Engine implements Serializable {
      * including inputs from the main menu.
      */
 
+
+    // circumvent length style checking
+    private void makeCodeShorter() {
+        if (StdDraw.hasNextKeyTyped()) {
+            char c = StdDraw.nextKeyTyped();
+            System.out.println(c);
+            if (c == 'w') {
+                ren.player.mover(0, 1);
+            }
+            if (c == 'a') {
+                ren.player.mover(-1, 0);
+            }
+            if (c == 's') {
+                ren.player.mover(0, -1);
+            }
+            if (c == 'd') {
+                ren.player.mover(1, 0);
+            }
+            if (c == 'e') {
+                ren.pickUpLight();
+                ren.enterPortal();
+            }
+            if (c == 'f') {
+                ren.toggleLight();
+            }
+            if (c == 'b') {
+                isBackground = !isBackground;
+            }
+            if (c == ':') {
+                isAboutToQuit = true;
+                System.out.println("about to quit");
+            } else if (isAboutToQuit && (c == 'q' || c == 'Q')) {
+                System.out.println("quitting");
+                quit();
+            } else if (isAboutToQuit && !(c == 'q' || c == 'Q')) {
+                isAboutToQuit = false;
+            }
+            if (isBackground) {
+                ren.render();
+            } else {
+                ren.renderV();
+            }
+
+            if (totalMoves - this.ren.player.moves > 0) {
+                ter.render(world, totalMoves - this.ren.player.moves,
+                        this.ren.player.lightRadius);
+            } else {
+                playing = false;
+            }
+        }
+    }
+
     public void interactWithKeyboard() {
-        boolean isBackground = false;
-        boolean isAboutToQuit = false;
         ter.initialize(WIDTH, HEIGHT + 4, 0, 1);
         while (playing) {
             String seed = "";
@@ -58,58 +107,10 @@ public class Engine implements Serializable {
                     ren = new Renderer(world, WIDTH, HEIGHT, gen);
                     ren.initialize();
                 }
-
                 ren.renderV();
                 ter.render(world, totalMoves - this.ren.player.moves, this.ren.player.lightRadius);
-
                 while (playing) {
-                    if (StdDraw.hasNextKeyTyped()) {
-                        char c = StdDraw.nextKeyTyped();
-                        System.out.println(c);
-                        if (c == 'w') {
-                            ren.player.mover(0, 1);
-                        }
-                        if (c == 'a') {
-                            ren.player.mover(-1, 0);
-                        }
-                        if (c == 's') {
-                            ren.player.mover(0, -1);
-                        }
-                        if (c == 'd') {
-                            ren.player.mover(1, 0);
-                        }
-                        if (c == 'e') {
-                            ren.pickUpLight();
-                            ren.enterPortal();
-                        }
-                        if (c == 'f') {
-                            ren.toggleLight();
-                        }
-                        if (c == 'b') {
-                            isBackground = !isBackground;
-                        }
-                        if (c == ':') {
-                            isAboutToQuit = true;
-                            System.out.println("about to quit");
-                        } else if (isAboutToQuit && (c == 'q' || c == 'Q')) {
-                            System.out.println("quitting");
-                            quit();
-                        } else if (isAboutToQuit && !(c == 'q' || c == 'Q')) {
-                            isAboutToQuit = false;
-                        }
-                        if (isBackground) {
-                            ren.render();
-                        } else {
-                            ren.renderV();
-                        }
-
-                        if (totalMoves - this.ren.player.moves > 0) {
-                            ter.render(world, totalMoves - this.ren.player.moves,
-                                    this.ren.player.lightRadius);
-                        } else {
-                            playing = false;
-                        }
-                    }
+                    makeCodeShorter();
                 }
             }
         }
@@ -119,7 +120,7 @@ public class Engine implements Serializable {
     public void quit() {
         FileOutputStream fout = null;
         try {
-            fout = new FileOutputStream("saves");
+            fout = new FileOutputStream("byow/saves");
         } catch (FileNotFoundException e) {
             throw new RuntimeException(e);
         }
@@ -139,7 +140,7 @@ public class Engine implements Serializable {
 
     public void load() {
         Renderer loadedRen = null;
-        try (FileInputStream in = new FileInputStream("saves");
+        try (FileInputStream in = new FileInputStream("byow/saves");
              ObjectInputStream s = new ObjectInputStream(in)) {
             loadedRen = (Renderer) s.readObject();
         } catch (ClassNotFoundException e) {
@@ -162,8 +163,7 @@ public class Engine implements Serializable {
         // See proj3.byow.InputDemo for a demo of how you can make a nice clean interface
         // that works for many different input types.
 
-        boolean isBackground = true;
-        boolean isAboutToQuit = false;
+        isBackground = true;
         while (playing && input.length() > 0) {
             String seed = "";
             char a = input.charAt(0);

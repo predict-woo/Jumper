@@ -25,10 +25,9 @@ import java.util.Random;
 public class TETile implements Serializable {
     private final char character; // Do not rename character or the autograder will break.
     private final Color textColor;
-    private Color backgroundColor;
     private final String description;
     private final String filepath;
-
+    private Color backgroundColor;
     private int lightValue = 100;
 
     /**

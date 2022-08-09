@@ -5,24 +5,24 @@ import java.util.*;
 
 public class Map implements Serializable {
 
-    int WIDTH;
-    int HEIGHT;
+    int width;
+    int height;
     Random gen;
 
-    int[][] world;
+    int[][] rootWorld;
 
     ArrayList<Room> roomList = new ArrayList<>();
     ArrayList<BST> bstList = new ArrayList<>();
     ArrayList<Corr> corrList = new ArrayList<>();
 
-    public Map(int WIDTH, int HEIGHT, Random gen) {
-        this.WIDTH = WIDTH;
-        this.HEIGHT = HEIGHT;
+    public Map(int width, int height, Random gen) {
+        this.width = width;
+        this.height = height;
         this.gen = gen;
-        this.world = new int[WIDTH][HEIGHT];
-        for (int i = 0; i < WIDTH; i++) {
-            for (int j = 0; j < HEIGHT; j++) {
-                this.world[i][j] = -1;
+        this.rootWorld = new int[width][height];
+        for (int i = 0; i < width; i++) {
+            for (int j = 0; j < height; j++) {
+                this.rootWorld[i][j] = -1;
             }
         }
     }
@@ -60,14 +60,14 @@ public class Map implements Serializable {
     }
 
     public void genDungeon() {
-        BST root = new BST(0, WIDTH - 1, 0, HEIGHT - 1, 0);
+        BST root = new BST(0, width - 1, 0, height - 1, 0);
         helper1(root, roomList, bstList);
         for (Room r : roomList) {
-            Room.drawRoom(r, world);
+            Room.drawRoom(r, rootWorld);
         }
         helper2(root, corrList);
         for (Corr c : corrList) {
-            c.drawCorr(world);
+            c.drawCorr(rootWorld);
         }
     }
 

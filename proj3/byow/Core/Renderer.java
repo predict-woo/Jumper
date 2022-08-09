@@ -14,8 +14,8 @@ public class Renderer implements Serializable {
     Map map;
     TETile[][] world;
 
-    int WIDTH;
-    int HEIGHT;
+    int width;
+    int height;
     Random gen;
 
     ArrayList<Light> lightArrayList = new ArrayList<>();
@@ -32,13 +32,13 @@ public class Renderer implements Serializable {
     int[] endColor2 = new int[]{159, 159, 159};
 
 
-    public Renderer(TETile[][] world, int WIDTH, int HEIGHT, Random gen) {
+    public Renderer(TETile[][] world, int width, int height, Random gen) {
         this.gen = gen;
-        this.map = new Map(WIDTH, HEIGHT, gen);
+        this.map = new Map(width, height, gen);
         this.map.genDungeon();
         this.world = world;
-        this.WIDTH = WIDTH;
-        this.HEIGHT = HEIGHT;
+        this.width = width;
+        this.height = height;
         for (int i = 0; i < 10; i++) {
             unseenLightArray[i] = new TETile(' ', Color.WHITE,
                     new Color((endColor1[0] * i + startColor[0] * (9 - i)) / 9,
@@ -114,13 +114,13 @@ public class Renderer implements Serializable {
         this.player = new Player(gen.nextInt(r.x2 - r.x1 - 1) + r.x1 + 1,
                 gen.nextInt(r.y2 - r.y1 - 1) + r.y1 + 1, world);
 
-        for (int i = 0; i < WIDTH; i++) {
-            for (int j = 0; j < HEIGHT; j++) {
-                if (this.map.world[i][j] == 0) {
+        for (int i = 0; i < width; i++) {
+            for (int j = 0; j < height; j++) {
+                if (this.map.rootWorld[i][j] == 0) {
                     this.world[i][j] = Tileset.FLOOR;
-                } else if (this.map.world[i][j] == 1) {
+                } else if (this.map.rootWorld[i][j] == 1) {
                     this.world[i][j] = Tileset.WALL;
-                } else if (this.map.world[i][j] == -1) {
+                } else if (this.map.rootWorld[i][j] == -1) {
                     this.world[i][j] = Tileset.NOTHING;
                 }
             }
@@ -148,13 +148,13 @@ public class Renderer implements Serializable {
     }
 
     public void render() {
-        for (int i = 0; i < WIDTH; i++) {
-            for (int j = 0; j < HEIGHT; j++) {
-                if (this.map.world[i][j] == 0) {
+        for (int i = 0; i < width; i++) {
+            for (int j = 0; j < height; j++) {
+                if (this.map.rootWorld[i][j] == 0) {
                     this.world[i][j] = Tileset.FLOOR;
-                } else if (this.map.world[i][j] == 1) {
+                } else if (this.map.rootWorld[i][j] == 1) {
                     this.world[i][j] = Tileset.WALL;
-                } else if (this.map.world[i][j] == -1) {
+                } else if (this.map.rootWorld[i][j] == -1) {
                     this.world[i][j] = Tileset.NOTHING;
                 }
             }
@@ -190,15 +190,15 @@ public class Renderer implements Serializable {
     }
 
     public void renderV() {
-        for (int i = 0; i < WIDTH; i++) {
-            for (int j = 0; j < HEIGHT; j++) {
+        for (int i = 0; i < width; i++) {
+            for (int j = 0; j < height; j++) {
                 int dist = Math.abs(i - player.x) + Math.abs(j - player.y);
                 if (dist < player.lightRadius) {
-                    if (this.map.world[i][j] == 0) {
+                    if (this.map.rootWorld[i][j] == 0) {
                         this.world[i][j] = Tileset.FLOOR;
-                    } else if (this.map.world[i][j] == 1) {
+                    } else if (this.map.rootWorld[i][j] == 1) {
                         this.world[i][j] = Tileset.WALL;
-                    } else if (this.map.world[i][j] == -1) {
+                    } else if (this.map.rootWorld[i][j] == -1) {
                         this.world[i][j] = Tileset.NOTHING;
                     }
                 } else {
@@ -230,7 +230,8 @@ public class Renderer implements Serializable {
             }
         }
         for (Portal p : portalArrayList) {
-            if (p.link != null && Math.abs(p.x - player.x) + Math.abs(p.y - player.y) < player.lightRadius) {
+            if (p.link != null
+                    && Math.abs(p.x - player.x) + Math.abs(p.y - player.y) < player.lightRadius) {
                 this.world[p.x][p.y] = Tileset.PORTAL;
             }
         }
