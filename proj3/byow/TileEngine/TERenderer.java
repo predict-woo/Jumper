@@ -115,7 +115,7 @@ public class TERenderer {
         StdDraw.setPenColor(Color.WHITE);
         Font font = new Font("Monaco", Font.BOLD, TILE_SIZE * 2);
         StdDraw.setFont(font);
-        StdDraw.text(width / 2, height - 3, "moves: " + moves + "  energy: " + energy);
+        StdDraw.text(width / 2, height - 3, "moves left: " + moves + "  energy: " + energy);
     }
 
     public void seedPage(String seed) {
@@ -136,11 +136,13 @@ public class TERenderer {
         StdDraw.text(width / 2, height / 2 - 6, "Quit (Q)");
     }
 
-    public void gameOver() {
+    public void gameOver(int num) {
         StdDraw.clear(Color.black);
         StdDraw.setPenColor(Color.red);
         StdDraw.setFont(new Font("Monaco", Font.BOLD, 35));
         StdDraw.text(width / 2, height / 2 + 5, "Game Over");
+        StdDraw.setPenColor(Color.GREEN);
+        StdDraw.text(width / 2, height / 2, "You Collected " + num + " light sources!");
         StdDraw.show();
     }
 

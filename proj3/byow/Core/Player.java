@@ -11,6 +11,8 @@ public class Player implements Serializable {
 
     int lightRadius;
 
+    int lightPick = 0;
+
     TETile[][] world;
 
     int moves;

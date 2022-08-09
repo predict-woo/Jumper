@@ -115,7 +115,7 @@ public class Engine implements Serializable {
                 }
             }
         }
-        ter.gameOver();
+        ter.gameOver(ren.player.lightPick);
     }
 
     public void quit() {
