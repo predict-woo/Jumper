@@ -1,7 +1,9 @@
 package byow.Core;
+
+import java.io.Serializable;
 import java.util.*;
 
-public class Map {
+public class Map implements Serializable {
 
     int WIDTH;
     int HEIGHT;
@@ -13,7 +15,7 @@ public class Map {
     ArrayList<BST> bstList = new ArrayList<>();
     ArrayList<Corr> corrList = new ArrayList<>();
 
-    public Map(int WIDTH,int HEIGHT,Random gen){
+    public Map(int WIDTH, int HEIGHT, Random gen) {
         this.WIDTH = WIDTH;
         this.HEIGHT = HEIGHT;
         this.gen = gen;
@@ -24,7 +26,6 @@ public class Map {
             }
         }
     }
-
 
 
     private void helper1(BST b, ArrayList<Room> roomArrayList, ArrayList<BST> bstArrayList) {
@@ -69,7 +70,8 @@ public class Map {
             c.drawCorr(world);
         }
     }
-    public class Room {
+
+    public class Room implements Serializable {
         int x1;
         int x2;
         int y1;
@@ -84,8 +86,8 @@ public class Map {
 
         public static void drawRoom(Room room, int[][] intTiles) {
             for (int i = room.x1; i <= room.x2; i++) {
-                for (int j = room.y1; j <=room.y2 ; j++) {
-                    if(i == room.x1 || i == room.x2 || j == room.y1 || j == room.y2){
+                for (int j = room.y1; j <= room.y2; j++) {
+                    if (i == room.x1 || i == room.x2 || j == room.y1 || j == room.y2) {
                         intTiles[i][j] = 1;
                     } else {
                         intTiles[i][j] = 0;
@@ -95,7 +97,7 @@ public class Map {
         }
     }
 
-    private class Corr {
+    private class Corr implements Serializable {
         int dir;
         int x;
         int y;
@@ -107,7 +109,7 @@ public class Map {
         }
 
         private void dir0(int xCorr, int yCorr, int[][] world) {
-            while (!(world[xCorr][yCorr] ==1)) {
+            while (!(world[xCorr][yCorr] == 1)) {
                 yCorr--;
             }
             if (world[xCorr][yCorr - 1] == 1
@@ -123,7 +125,7 @@ public class Map {
                 world[xCorr][yCorr - 1] = 0;
             }
             world[xCorr][yCorr] = 0;
-            while (!(world[xCorr][yCorr] ==1)) {
+            while (!(world[xCorr][yCorr] == 1)) {
                 world[xCorr][yCorr] = 0;
                 world[xCorr + 1][yCorr] = 1;
                 world[xCorr - 1][yCorr] = 1;
@@ -197,7 +199,7 @@ public class Map {
         }
     }
 
-    private class BST {
+    private class BST implements Serializable {
 
         int x1;
         int x2;

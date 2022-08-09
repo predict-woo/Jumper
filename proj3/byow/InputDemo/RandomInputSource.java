@@ -1,7 +1,5 @@
 package byow.InputDemo;
 
-import edu.princeton.cs.algs4.StdDraw;
-
 import java.util.Random;
 
 /**
@@ -14,7 +12,9 @@ public class RandomInputSource implements InputSource {
         r = new Random(seed);
     }
 
-    /** Returns a random letter between a and z.*/
+    /**
+     * Returns a random letter between a and z.
+     */
     public char getNextKey() {
         return (char) (r.nextInt(26) + 'A');
     }
