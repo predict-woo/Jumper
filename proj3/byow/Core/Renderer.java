@@ -58,7 +58,7 @@ public class Renderer implements Serializable {
             if (l.x == player.x && l.y == player.y) {
                 lightArrayList.remove(i);
                 player.lightRadius += 5;
-                player.lightPick ++;
+                player.lightPick++;
             }
         }
     }
