@@ -61,6 +61,7 @@ public class Engine implements Serializable {
             } else if (isAboutToQuit && (c == 'q' || c == 'Q')) {
                 System.out.println("quitting");
                 quit();
+                System.exit(-1);
             } else if (isAboutToQuit && !(c == 'q' || c == 'Q')) {
                 isAboutToQuit = false;
             }
@@ -135,7 +136,6 @@ public class Engine implements Serializable {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        System.exit(-1);
     }
 
     public void load() {
